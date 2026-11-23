@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adiós 2026!</title>
+    <!-- Tailwind CSS 제공 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-10 px-4 sm:px-6 flex flex-col items-center">
+
+    <div class="max-w-2xl w-full space-y-8">
+        <!-- 1. 헤더 (행사명 & 장소) -->
+        <div class="text-center space-y-3 bg-slate-800/50 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm shadow-xl">
+            <h1 class="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-amber-400 via-rose-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-md">
+                Adiós 2026!
+            </h1>
+            <div class="flex items-center justify-center space-x-2 text-slate-300 bg-slate-900/60 py-2 px-4 rounded-full max-w-xs mx-auto border border-slate-700">
+                <i class="fa-solid fa-location-dot text-rose-500 animate-pulse"></i>
+                <span class="font-medium text-sm">장소: <strong class="text-amber-300 font-semibold">우리만의 전민동 아지트</strong></span>
+            </div>
+        </div>
+
+        <!-- 2. 입력 폼 카드 -->
+        <div class="bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-700/60 space-y-6">
+            
+            <!-- (1) 이름 입력 상자 -->
+            <div class="space-y-2">
+                <label for="userName" class="block text-sm font-semibold text-slate-300 flex items-center justify-between">
+                    <span>1. 이름 <span class="text-rose-500 font-bold">*필수</span></span>
+                    <span class="text-xs text-slate-500">누가 참여하는지 적어주세요.</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-regular fa-user text-slate-400"></i>
+                    </div>
+                    <input type="text" id="userName" placeholder="이름을 입력해주세요 (필수)" 
+                           class="block w-full pl-10 pr-3 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm font-medium">
+                </div>
+            </div>
+
+            <!-- (2) 가능한 일정 입력 상자 & 날짜 선택 칩 -->
+            <div class="space-y-4 pt-2 border-t border-slate-700/50">
+                <div class="space-y-2">
+                    <label for="scheduleMemo" class="block text-sm font-semibold text-slate-300 flex items-center justify-between">
+                        <span>2. 가능한 일정 관련 메모 <span class="text-slate-500 font-normal">(선택)</span></span>
+                        <span class="text-xs text-slate-500">추가 일정 요구사항이나 조율용 메모를 적어주세요.</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 pt-3 flex items-start pointer-events-none">
+                            <i class="fa-regular fa-calendar-alt text-slate-400"></i>
+                        </div>
+                        <textarea id="scheduleMemo" rows="2" placeholder="일정에 대해 추가로 하실 말씀이 있다면 작성해주세요" 
+                                  class="block w-full pl-10 pr-3 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm"></textarea>
+                    </div>
+                </div>
+
+                <!-- 일정 선택 가이드 및 칩 구역 -->
+                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 space-y-3">
+                    <p class="text-xs font-semibold text-amber-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        가능한 일정을 2개 이상 선택해주세요 (복수 선택 가능)
+                    </p>
+                    
+                    <!-- 날짜 선택 그리드 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="dateGrid">
+                        <!-- 날짜 그룹: 11/30 (월) -->
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-slate-400 block px-1">11/30 (월)</span>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" data-date="11/30 월 6시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">6시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="11/30 월 7시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">7시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="11/30 월 그 이후" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">그 이후</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 날짜 그룹: 12/1 (화) -->
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-slate-400 block px-1">12/1 (화)</span>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" data-date="12/1 화 6시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">6시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/1 화 7시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">7시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/1 화 그 이후" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">그 이후</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 날짜 그룹: 12/2 (수) -->
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-slate-400 block px-1">12/2 (수)</span>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" data-date="12/2 수 6시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">6시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/2 수 7시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">7시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/2 수 그 이후" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">그 이후</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 날짜 그룹: 12/3 (목) -->
+                        <div class="space-y-1.5">
+                            <span class="text-xs font-bold text-slate-400 block px-1">12/3 (목)</span>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" data-date="12/3 목 6시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">6시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/3 목 7시" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">7시</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                                <button type="button" data-date="12/3 목 그 이후" class="date-chip text-left p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/50 hover:border-slate-500 transition-all flex flex-col justify-between min-h-[4.5rem]">
+                                    <span class="text-xs font-semibold">그 이후</span>
+                                    <span class="name-slot text-[10px] text-emerald-400 font-bold truncate mt-1 block"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- (3) 음식 메뉴 입력 상자 -->
+            <div class="space-y-2 pt-2 border-t border-slate-700/50">
+                <label for="foodInput" class="block text-sm font-semibold text-slate-300">
+                    <span>3. 희망 음식 메뉴 <span class="text-slate-500 font-normal">(선택)</span></span>
+                </label>
+                
+                <!-- 기획 지시사항 추가: 배달/온라인 및 희망 외부 식당 관련 가이드 문구 -->
+                <p class="text-xs text-indigo-300 leading-relaxed bg-indigo-950/40 p-3 rounded-lg border border-indigo-900/50">
+                    <i class="fa-solid fa-circle-info mr-1"></i>
+                    메뉴는 기본적으로 <strong>배달 또는 온라인 주문</strong>으로 하려고 하나, 혹시 현장에서 즐기고 싶거나 포장해 올 <strong class="text-amber-300 font-semibold">희망하는 외부 식당</strong>이 있다면 함께 자유롭게 적어주세요!
+                </p>
+
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-bowl-food text-slate-400"></i>
+                        </div>
+                        <input type="text" id="foodInput" placeholder="예: 비비큐 바삭한 치킨, 전민동 00포차 수제안주 등" 
+                               class="block w-full pl-10 pr-3 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm font-medium">
+                    </div>
+                    <button type="button" id="btnSample" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-3 rounded-xl border border-indigo-500 transition-all flex items-center gap-1.5 whitespace-nowrap shadow-md">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        샘플 추천
+                    </button>
+                </div>
+                
+                <!-- 입력한 메뉴를 아래 칩이나 태그 형태로 띄워주는 리스트 -->
+                <div id="foodTagList" class="flex flex-wrap gap-2 pt-1">
+                    <!-- 추가된 메뉴 태그들이 여기에 노출됨 -->
+                </div>
+            </div>
+
+            <!-- 4. 최종 작성 완료 버튼 -->
+            <div class="pt-4 border-t border-slate-700/50">
+                <button type="button" id="btnSubmit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-base py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/10 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane text-slate-950"></i>
+                    <span>🎉 최종 작성 완료</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- 3. 실시간 및 누적 등록 현황 (Supabase 공유 데이터) -->
+        <div class="bg-slate-800/80 rounded-2xl p-6 sm:p-8 border border-slate-700/60 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-simple text-amber-400"></i>
+                    참석자 현황 및 희망 메뉴판
+                </h2>
+                <span class="text-[11px] text-slate-500">전체 초기화는 관리자 전용</span>
+            </div>
+
+            <!-- 누적 명단 현황 -->
+            <div id="noDashboard" class="text-center py-8 text-slate-500 text-sm">
+                <i class="fa-regular fa-folder-open text-3xl mb-2 block"></i>
+                아직 등록된 기록이 없습니다. 먼저 첫 번째 예약을 완성해 보세요!
+            </div>
+
+            <div id="dashboardArea" class="space-y-4 hidden">
+                <div class="overflow-x-auto rounded-xl border border-slate-700/80">
+                    <table class="w-full text-sm text-left text-slate-300">
+                        <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-700">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 font-semibold">참가자</th>
+                                <th scope="col" class="px-4 py-3 font-semibold">선택한 일정</th>
+                                <th scope="col" class="px-4 py-3 font-semibold">희망 메뉴</th>
+                                <th scope="col" class="px-4 py-3 font-semibold">일정 메모</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody" class="divide-y divide-slate-700/50">
+                            <!-- Supabase 공유 데이터 바인딩 구역 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 전체 일정 분포 요약 통계 -->
+                <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700/50 space-y-2">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-regular fa-clock"></i> 일정별 최다 선택 현황
+                    </h3>
+                    <div id="statsContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <!-- 통계 렌더링 구역 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 알림 팝업 토스트 -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-emerald-500 text-slate-950 px-4 py-3 rounded-xl shadow-2xl font-bold transition-opacity duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">등록이 완료되었습니다!</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase 프로젝트 연결 정보 (브라우저 공개용 Publishable Key만 사용)
+        const SUPABASE_URL = "https://qewfwusaodhrhfgowlrs.supabase.co";
+        const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Abpb0adi2VtZqd_oyJWhGg_kss5Wx37";
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+        // DOM 요소 정의
+        const userNameInput = document.getElementById('userName');
+        const scheduleMemoInput = document.getElementById('scheduleMemo');
+        const foodInput = document.getElementById('foodInput');
+        const btnSample = document.getElementById('btnSample');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const foodTagList = document.getElementById('foodTagList');
+        const dateChips = document.querySelectorAll('.date-chip');
+        const attendanceTableBody = document.getElementById('attendanceTableBody');
+        const dashboardArea = document.getElementById('dashboardArea');
+        const noDashboard = document.getElementById('noDashboard');
+        const statsContainer = document.getElementById('statsContainer');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        // 상태 관리 변수
+        let selectedDates = [];
+        let enteredFoods = [];
+        let appData = [];
+
+
+        // 음식 메뉴 샘플 리스트
+        const foodSamples = [
+            "굽네치킨 고추바사삭 (배달)",
+            "전민동 '광세족발' 반반세트 (외부식당 포장)",
+            "도미노 피자 포테이토 (배달)",
+            "엽기떡볶이 착한맛 + 모둠튀김 (배달)",
+            "전민동 '한우곰탕' 수육전골 (외부식당 희망)",
+            "푸라닭 블랙알리오 치킨 (배달)",
+            "모둠 초밥 & 롤 세트 (온라인 주문)",
+            "마라탕 & 꿔바로우 세트 (배달)",
+            "전민동 '전민횟집' 대방어회 (외부식당 포장)",
+            "비비큐 황금올리브 치킨 (배달)",
+            "멕시카나 치킨 (배달)"
+        ];
+
+        // 초기화 로드
+        window.addEventListener('DOMContentLoaded', async () => {
+            initEvents();
+            await loadStorageData();
+            subscribeToChanges();
+        });
+
+        // 이벤트 초기화
+        function initEvents() {
+            // 이름 입력 시, 현재 선택된 일정 칩 하단에 실시간 동기화
+            userNameInput.addEventListener('input', () => {
+                updateChipsNameSlot();
+            });
+
+            // 일정 칩 다중 선택 토글
+            dateChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const dateValue = chip.getAttribute('data-date');
+                    const index = selectedDates.indexOf(dateValue);
+                    
+                    if (index > -1) {
+                        // 이미 선택된 상태면 취소
+                        selectedDates.splice(index, 1);
+                        chip.classList.remove('bg-indigo-600/30', 'border-indigo-400', 'ring-2', 'ring-indigo-500/50');
+                        chip.classList.add('bg-slate-800/80', 'border-slate-700');
+                    } else {
+                        // 새로 선택
+                        selectedDates.push(dateValue);
+                        chip.classList.remove('bg-slate-800/80', 'border-slate-700');
+                        chip.classList.add('bg-indigo-600/30', 'border-indigo-400', 'ring-2', 'ring-indigo-500/50');
+                    }
+                    updateChipsNameSlot();
+                });
+            });
+
+            // 음식 메뉴 입력 상자 엔터 치면 태그로 추가
+            foodInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addFoodTag();
+                }
+            });
+
+            // 샘플 추천 버튼 누르면 샘플 하나 삽입
+            btnSample.addEventListener('click', () => {
+                const randomIdx = Math.floor(Math.random() * foodSamples.length);
+                const sampled = foodSamples[randomIdx];
+                foodInput.value = sampled;
+                // 포커싱 및 시각효과
+                foodInput.focus();
+                showToast("🎯 맛있는 샘플 추천 메뉴를 채웠습니다!", "indigo");
+            });
+
+            // 최종 작성 완료 클릭
+            btnSubmit.addEventListener('click', submitData);
+
+        }
+
+        // 선택한 날짜 칩 밑에 이름 실시간 표시/제거 함수
+        function updateChipsNameSlot() {
+            const currentName = userNameInput.value.trim();
+            dateChips.forEach(chip => {
+                const dateValue = chip.getAttribute('data-date');
+                const slot = chip.querySelector('.name-slot');
+                
+                if (selectedDates.includes(dateValue)) {
+                    // 선택된 칩이고 이름이 존재하면 이름 표시
+                    slot.textContent = currentName ? `👤 ${currentName}` : "👤 대기중";
+                    slot.style.opacity = "1";
+                } else {
+                    // 선택되지 않은 칩이면 깨끗하게 지움
+                    slot.textContent = "";
+                    slot.style.opacity = "0";
+                }
+            });
+        }
+
+        // 음식 태그 추가 로직
+        function addFoodTag() {
+            const val = foodInput.value.trim();
+            if (!val) return;
+            
+            if (enteredFoods.includes(val)) {
+                showToast("이미 입력되어 있는 메뉴입니다.", "amber");
+                foodInput.value = "";
+                return;
+            }
+
+            enteredFoods.push(val);
+            renderFoodTags();
+            foodInput.value = "";
+        }
+
+        // 음식 태그 렌더링
+        function renderFoodTags() {
+            foodTagList.innerHTML = "";
+            enteredFoods.forEach((food, index) => {
+                const tag = document.createElement('span');
+                tag.className = "inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-600 transition-all";
+                tag.innerHTML = `
+                    <span>${food}</span>
+                    <button type="button" class="text-slate-400 hover:text-rose-400 font-bold focus:outline-none" onclick="removeFoodTag(${index})">
+                        <i class="fa-solid fa-xmark text-[10px]"></i>
+                    </button>
+                `;
+                foodTagList.appendChild(tag);
+            });
+        }
+
+        // 특정 음식 태그 삭제 (전역 바인딩 필요)
+        window.removeFoodTag = function(index) {
+            enteredFoods.splice(index, 1);
+            renderFoodTags();
+        }
+
+        // 최종 작성 데이터 저장 & 검증 (공유 DB에 등록)
+        async function submitData() {
+            const name = userNameInput.value.trim();
+            const memo = scheduleMemoInput.value.trim();
+
+            if (!name) {
+                alert("성공적인 조율을 위해 '이름'은 필수 사항입니다. 먼저 입력해 주세요!");
+                userNameInput.focus();
+                return;
+            }
+
+            if (selectedDates.length < 2) {
+                alert("가능한 일정을 최소 2개 이상 선택해 주세요!");
+                return;
+            }
+
+            const remainingFood = foodInput.value.trim();
+            if (remainingFood && !enteredFoods.includes(remainingFood)) {
+                enteredFoods.push(remainingFood);
+                foodInput.value = "";
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add("opacity-60", "cursor-not-allowed");
+
+            const record = {
+                name,
+                memo: memo || "-",
+                dates: [...selectedDates],
+                foods: enteredFoods.length > 0 ? [...enteredFoods] : ["상관없음/입력없음"]
+            };
+
+            const { error } = await db.from("attendance").insert(record);
+
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove("opacity-60", "cursor-not-allowed");
+
+            if (error) {
+                console.error("Supabase insert error:", error);
+                alert("등록 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.\n" + error.message);
+                return;
+            }
+
+            resetForm();
+            await loadStorageData();
+            showToast(`🎉 ${name}님의 참석 일정이 공유 현황에 기록되었습니다!`, "emerald");
+        }
+
+        // 입력 폼 필드 클리어
+        function resetForm() {
+            userNameInput.value = "";
+            scheduleMemoInput.value = "";
+            foodInput.value = "";
+            selectedDates = [];
+            enteredFoods = [];
+            
+            // 날짜 칩 리셋
+            dateChips.forEach(chip => {
+                chip.classList.remove('bg-indigo-600/30', 'border-indigo-400', 'ring-2', 'ring-indigo-500/50');
+                chip.classList.add('bg-slate-800/80', 'border-slate-700');
+                chip.querySelector('.name-slot').textContent = "";
+                chip.querySelector('.name-slot').style.opacity = "0";
+            });
+
+            // 음식 태그 리셋
+            renderFoodTags();
+        }
+
+        // Supabase 공유 데이터 로드
+        async function loadStorageData() {
+            const { data, error } = await db
+                .from("attendance")
+                .select("id, name, memo, dates, foods, created_at")
+                .order("created_at", { ascending: true });
+
+            if (error) {
+                console.error("Supabase select error:", error);
+                noDashboard.classList.remove("hidden");
+                noDashboard.textContent = "공유 현황을 불러오지 못했습니다. Supabase 테이블 권한과 연결 정보를 확인해 주세요.";
+                dashboardArea.classList.add("hidden");
+                return;
+            }
+
+            appData = data || [];
+            if (appData.length === 0) {
+                dashboardArea.classList.add("hidden");
+                noDashboard.classList.remove("hidden");
+                noDashboard.textContent = "아직 등록된 기록이 없습니다. 먼저 첫 번째 예약을 완성해 보세요!";
+            } else {
+                noDashboard.classList.add("hidden");
+                dashboardArea.classList.remove("hidden");
+                renderDashboard();
+            }
+        }
+
+        // 다른 사람이 등록한 내용도 자동으로 새로고침
+        function subscribeToChanges() {
+            db.channel("attendance-live")
+                .on("postgres_changes",
+                    { event: "*", schema: "public", table: "attendance" },
+                    () => loadStorageData()
+                )
+                .subscribe((status) => {
+                    if (status === "CHANNEL_ERROR") {
+                        console.error("Supabase Realtime channel error");
+                    }
+                });
+        }
+
+        // 대시보드 테이블 & 통계 그리기
+        function renderDashboard() {
+            attendanceTableBody.innerHTML = "";
+            const dateCounts = {};
+
+            appData.forEach(item => {
+                // 행 추가
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                
+                // 날짜들 포맷팅
+                const dateTags = (item.dates || []).map(d => `<span class="inline-block bg-indigo-950/70 border border-indigo-900/60 text-indigo-300 text-[11px] px-1.5 py-0.5 rounded mr-1 mb-1 font-medium">${escapeHTML(d)}</span>`).join("");
+                
+                // 음식 포맷팅
+                const foodTags = (item.foods || []).map(f => `<span class="inline-block bg-slate-700/50 border border-slate-600/40 text-slate-300 text-[11px] px-1.5 py-0.5 rounded mr-1 mb-1">${escapeHTML(f)}</span>`).join("");
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-semibold text-slate-100 flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        ${escapeHTML(item.name || "")}
+                    </td>
+                    <td class="px-4 py-3">${dateTags}</td>
+                    <td class="px-4 py-3">${foodTags}</td>
+                    <td class="px-4 py-3 text-xs text-slate-400 italic max-w-[150px] truncate" title="${escapeHTML(item.memo || "-")}">
+                        ${escapeHTML(item.memo || "-")}
+                    </td>
+                `;
+                attendanceTableBody.appendChild(tr);
+
+                // 통계용 일정 카운트
+                item.dates.forEach(d => {
+                    dateCounts[d] = (dateCounts[d] || 0) + 1;
+                });
+            });
+
+            // 일정별 통계 랜더링
+            statsContainer.innerHTML = "";
+            // 날짜 카운트 기준 높은 순서로 정리할 수 있게 배열 변환
+            const sortedDates = Object.entries(dateCounts).sort((a,b) => b[1] - a[1]);
+
+            if (sortedDates.length === 0) {
+                statsContainer.innerHTML = `<span class="text-slate-500 text-xs col-span-full">아직 누적 일정 통계가 없습니다.</span>`;
+            } else {
+                sortedDates.forEach(([dateName, count]) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-900/80 p-2.5 rounded-lg border border-slate-700/80 flex items-center justify-between";
+                    card.innerHTML = `
+                        <span class="text-[11px] text-slate-300 font-medium truncate" title="${escapeHTML(dateName)}">${escapeHTML(dateName)}</span>
+                        <span class="text-xs bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-users text-[10px]"></i> ${count}명
+                        </span>
+                    `;
+                    statsContainer.appendChild(card);
+                });
+            }
+        }
+
+        // 토스트 팝업 제어
+        function showToast(msg, theme = "emerald") {
+            toastMsg.textContent = msg;
+            toast.className = `fixed bottom-5 right-5 px-4 py-3 rounded-xl shadow-2xl font-bold transition-opacity duration-300 opacity-100 flex items-center gap-2 z-50`;
+            
+            if (theme === "emerald") {
+                toast.classList.add('bg-emerald-500', 'text-slate-950');
+            } else if (theme === "amber") {
+                toast.classList.add('bg-amber-500', 'text-slate-950');
+            } else if (theme === "indigo") {
+                toast.classList.add('bg-indigo-600', 'text-slate-100');
+            } else if (theme === "rose") {
+                toast.classList.add('bg-rose-500', 'text-slate-950');
+            }
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        // XSS 방지 인코딩 함수
+        function escapeHTML(str) {
+            return String(str ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
